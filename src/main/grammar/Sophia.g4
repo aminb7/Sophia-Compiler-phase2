@@ -20,21 +20,51 @@ grammar Sophia;
 
 sophia returns[Program sophiaProgram]: program EOF;
 
-program: (sophiaClass)*;
+program returns[Program prog]: {$prog = new Program();} (classDec = sophiaClass {$prog.addClass($classDec.classDec);})*;
 
-sophiaClass: CLASS identifier (EXTENDS identifier)? LBRACE (((varDeclaration | method)* constructor (varDeclaration | method)*) | ((varDeclaration | method)*)) RBRACE;
+sophiaClass returns[ClassDeclaration classDec]: CLASS name = identifier (EXTENDS parent = identifier)?
+	{
+		$classDec = new ClassDeclaration($name.id);
+		if ($parent.text != null)
+			$classDec.setParentClassName($parent.id);
+	}
+	LBRACE (((varDec1 = varDeclaration | methodDec1 = method)* c = constructor (varDec2 = varDeclaration | methodDec2 = method)*)
+	{
+		if ($varDec1.text != null) $classDec.addField(new FieldDeclaration($varDec1.varDec));
+		if ($varDec2.text != null) $classDec.addField(new FieldDeclaration($varDec2.varDec));
+		if ($methodDec1.text != null) $classDec.addMethod($methodDec1.methodDec);
+		if ($methodDec2.text != null) $classDec.addMethod($methodDec2.methodDec);
+		if ($c.text != null) $classDec.setConstructor($c.c);
+	}
+	| ((varDec = varDeclaration | methodDec = method)*)) RBRACE
+	{
+    	if ($varDec.text != null) $classDec.addField(new FieldDeclaration($varDec.varDec));
+    	if ($varDec.text != null) $classDec.addMethod($methodDec.methodDec);
+	};
 
-varDeclaration: identifier COLON type SEMICOLLON;
+varDeclaration returns[VarDeclaration varDec]:
+	name = identifier COLON t = type SEMICOLLON {$varDec = new VarDeclaration($name.id, $t._type);};
 
-method: DEF (type | VOID) identifier LPAR methodArguments RPAR LBRACE methodBody RBRACE;
+method returns[MethodDeclaration methodDec]:
+	DEF (t = type | v = VOID) name = identifier LPAR args = methodArguments RPAR LBRACE body = methodBody RBRACE
+	{
+		if ($v.text == null)
+			$methodDec = new MethodDeclaration($name.id, $t._type);
+		else
+			$methodDec = new MethodDeclaration($name.id, new NullType());
+		$methodDec.setArgs($args.args);
+		$methodDec.setBody($body.body);
+	};
 
-constructor: DEF identifier LPAR methodArguments RPAR LBRACE methodBody RBRACE;
+constructor returns[ConstructorDeclaration c]: DEF identifier LPAR methodArguments RPAR LBRACE methodBody RBRACE;
 
-methodArguments: (variableWithType (COMMA variableWithType)*)?;
+methodArguments returns[ArrayList<VarDeclaration> args]: {$args = new ArrayList();}
+	(var1 = variableWithType {$args.add($var1.varDec);} (COMMA var2 = variableWithType)*)?
+	{ if ($var2.text != null) $args.add($var2.varDec); };
 
-variableWithType: identifier COLON type;
+variableWithType returns[VarDeclaration varDec]: name = identifier COLON t = type {$varDec = new VarDeclaration($name.id, $t._type);};
 
-type: primitiveDataType | listType | functionPointerType | classType;
+type returns[Type _type]: primitiveDataType | listType | functionPointerType | classType {$_type = new IntType();};
 
 classType: identifier;
 
@@ -50,7 +80,7 @@ typesWithComma: type (COMMA type)*;
 
 primitiveDataType: INT | STRING | BOOLEAN;
 
-methodBody: (varDeclaration)* (statement)*;
+methodBody returns[ArrayList<Statement> body]: {$body = new ArrayList();} (varDeclaration)* (statement)*;
 
 statement: forStatement | foreachStatement | ifStatement | assignmentStatement | printStatement | continueBreakStatement | methodCallStatement | returnStatement | block;
 
@@ -108,7 +138,7 @@ boolValue: TRUE | FALSE;
 
 listValue: LBRACK methodCallArguments RBRACK;
 
-identifier: IDENTIFIER;
+identifier returns[Identifier id]: name = IDENTIFIER {$id = new Identifier($name.text);};
 
 
 DEF: 'def';
