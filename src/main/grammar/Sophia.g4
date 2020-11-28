@@ -82,25 +82,25 @@ primitiveDataType: INT | STRING | BOOLEAN;
 
 methodBody returns[ArrayList<Statement> body]: {$body = new ArrayList();} (varDeclaration)* (statement)*;
 
-statement returns[Statement _statement]: forStatement | foreachStatement | ifStatement | assignmentStatement | prntStmt = printStatement {$_statement = $prntStmt.printStmt} | cntnuStatement = continueBreakStatement| methodCallStatement | returnStatement | block;
+statement returns[Statement _statement]: forStatement | foreachStatement | ifStatement | assignmentStatement | prntStmt = printStatement {$_statement = $prntStmt._printStatement} | cntnuBrkStmt = continueBreakStatement {$_statement = $cntnuBrkStmt._continueBreakStatement} | mthdcall = methodCallStatement {$_statement = $mthdcall._methodCallStatement} | rtrnStmt = returnStatement {$_statement = $rtrnStmt._returnStatement} | blck = block {$_statement = blck._block};
 
-block: LBRACE (statement)* RBRACE;
+block returns[BlockStmt _block]: {$_block = new BlockStmt()} LBRACE (stmt = statement {$_block.addStatement($stmt._statement)})* RBRACE;
 
 assignmentStatement: assignment SEMICOLLON;
 
 assignment: orExpression ASSIGN expression;
 
-printStatement returns[PrintStmt printStmt]: PRINT LPAR exp1 = expression {$printStmt = new PrintStmt($exp1._expression)} RPAR SEMICOLLON;
+printStatement returns[PrintStmt _printStatement]: PRINT LPAR exp1 = expression {$_printStatement = new PrintStmt($exp1._expression)} RPAR SEMICOLLON;
 
-returnStatement: RETURN expression? SEMICOLLON;
+returnStatement returns[ReturnStmt _returnStatement]: RETURN (exp1 = expression)? {%_returnStatement = new ReturnStmt(); if ($exp1.text != null) %_returnStatement.setReturnedExpr($exp1._expression)} SEMICOLLON;
 
-methodCallStatement: methodCall SEMICOLLON;
+methodCallStatement returns[MethodCallStmt _methodCallStatement]: mthdcall = methodCall {$_methodCallStatement = ($mthdcall._methodCall)} SEMICOLLON;
 
-methodCall: otherExpression ((LPAR methodCallArguments RPAR) | (DOT identifier) | (LBRACK expression RBRACK))* (LPAR methodCallArguments RPAR);
+methodCall returns[MethodCall _methodCall]: otherExpression ((LPAR methodCallArguments RPAR) | (DOT identifier) | (LBRACK expression RBRACK))* (LPAR methodCallArguments RPAR);
 
 methodCallArguments: (expression (COMMA expression)*)?;
 
-continueBreakStatement: (BREAK | CONTINUE) SEMICOLLON;
+continueBreakStatement returns[Statement _continueBreakStatement]: (BREAK {$_continueBreakStatement = new BreakStmt()} | CONTINUE {$_continueBreakStatement = new ContinueStmt()}) SEMICOLLON;
 
 forStatement: FOR LPAR (assignment)? SEMICOLLON (expression)? SEMICOLLON (assignment)? RPAR statement;
 
