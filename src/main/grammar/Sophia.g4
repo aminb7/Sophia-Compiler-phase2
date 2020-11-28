@@ -66,7 +66,7 @@ variableWithType returns[VarDeclaration varDec]: name = identifier COLON t = typ
 
 type returns[Type _type]: primitiveDataType | listType | functionPointerType | classType {$_type = new IntType();};
 
-classType: identifier;
+classType returns[ClassType _classType]: idntr = identifier {$_classType = new ClassType($idntr.id);};
 
 listType: LIST LPAR ((INT_VALUE SHARP type) | (listItemsTypes)) RPAR;
 
@@ -82,7 +82,7 @@ primitiveDataType: INT | STRING | BOOLEAN;
 
 methodBody returns[ArrayList<Statement> body]: {$body = new ArrayList();} (varDeclaration)* (statement)*;
 
-statement returns[Statement _statement]: forStatement | foreachStatement | ifStatement | assignmentStatement | prntStmt = printStatement {$_statement = $prntStmt._printStatement;} | cntnuBrkStmt = continueBreakStatement {$_statement = $cntnuBrkStmt._continueBreakStatement;} | mthdcall = methodCallStatement {$_statement = $mthdcall._methodCallStatement;} | rtrnStmt = returnStatement {$_statement = $rtrnStmt._returnStatement;} | blck = block {$_statement = $blck._block;};
+statement returns[Statement _statement]: forStatement | foreachStatement | ifStatement | assignmentStatement | prntStmt = printStatement {$_statement = $prntStmt._printStatement;} | cntnuBrkStmt = continueBreakStatement {$_statement = $cntnuBrkStmt._continueBreakStatement;} | mthdcallStmt = methodCallStatement {$_statement = $mthdcallStmt._methodCallStatement;} | rtrnStmt = returnStatement {$_statement = $rtrnStmt._returnStatement;} | blck = block {$_statement = $blck._block;};
 
 block returns[BlockStmt _block]: {$_block = new BlockStmt();} LBRACE (stmt = statement {$_block.addStatement($stmt._statement);})* RBRACE;
 
@@ -96,9 +96,9 @@ returnStatement returns[ReturnStmt _returnStatement]: RETURN (exp1 = expression)
 
 methodCallStatement returns[MethodCallStmt _methodCallStatement]: mthdcall = methodCall {$_methodCallStatement = new MethodCallStmt($mthdcall._methodCall);} SEMICOLLON;
 
-methodCall returns[MethodCall _methodCall]: otherExpression ((LPAR methodCallArguments RPAR) | (DOT identifier) | (LBRACK expression RBRACK))* (LPAR methodCallArguments RPAR);
+methodCall returns[MethodCall _methodCall, Expression _expression]: othrExpr = otherExpression {$_expression = $othrExpr._otherExpression;} ((LPAR mthdCllArgs = methodCallArguments RPAR) {$_expression = new MethodCall($_expression, $mthdCllArgs._methodCallArguments);} | (DOT idntfr = identifier) {$_expression = new ObjectOrListMemberAccess($_expression, $idntfr.id);} | (LBRACK exp1 = expression RBRACK) {$_expression = new ListAccessByIndex($_expression, $exp1._expression);})* (LPAR mthdCllArgs = methodCallArguments RPAR) {$_methodCall = new MethodCall($_expression, $mthdCllArgs._methodCallArguments);};
 
-methodCallArguments: (expression (COMMA expression)*)?;
+methodCallArguments returns[ArrayList<Expression> _methodCallArguments]: {$_methodCallArguments = new ArrayList<>();} (expr1 = expression {$_methodCallArguments.add($expr1._expression);} (COMMA expr2 = expression {$_methodCallArguments.add($expr2._expression);})*)?;
 
 continueBreakStatement returns[Statement _continueBreakStatement]: (BREAK {$_continueBreakStatement = new BreakStmt();} | CONTINUE {$_continueBreakStatement = new ContinueStmt();}) SEMICOLLON;
 
@@ -132,17 +132,17 @@ postUnaryExpression returns[Expression _postUnaryExpression, UnaryOperator opera
             $_postUnaryExpression = new UnaryExpression($acssExp._accessExpression, $operator);
     };
 
-accessExpression returns[Expression _accessExpression]: otherExpression ((LPAR methodCallArguments RPAR) | (DOT identifier) | (LBRACK expression RBRACK))*;
+accessExpression returns[Expression _accessExpression]: othrExp = otherExpression {$_accessExpression = $othrExp._otherExpression;} ((LPAR mthdCllArgs = methodCallArguments RPAR) {$_accessExpression = new MethodCall($_accessExpression, $mthdCllArgs._methodCallArguments);} | (DOT idntfr = identifier) {$_accessExpression = new ObjectOrListMemberAccess($_accessExpression, $idntfr.id);} | (LBRACK exp1 = expression RBRACK) {$_accessExpression = new ListAccessByIndex($_accessExpression, $exp1._expression);} )*;
 
-otherExpression: THIS | newExpression | values | identifier | LPAR (expression) RPAR;
+otherExpression returns[Expression _otherExpression]: THIS {$_otherExpression = new ThisClass();} | nwExpr = newExpression {$_otherExpression = $nwExpr._newExpression;} | vals = values {$_otherExpression = $vals._values;} | idntfr = identifier {$_otherExpression = $idntfr.id;} | LPAR (expr1 = expression) RPAR {$_otherExpression = $expr1._expression;};
 
-newExpression: NEW classType LPAR methodCallArguments RPAR;
+newExpression returns[NewClassInstance _newExpression]: NEW clssType = classType LPAR mthdCllArgs = methodCallArguments RPAR {$_newExpression = new NewClassInstance($clssType._classType, $mthdCllArgs._methodCallArguments);};
 
-values: boolValue | STRING_VALUE | INT_VALUE | NULL | listValue;
+values returns[Value _values]: blVal = boolValue {$_values = $blVal._boolValue;} | strVal = STRING_VALUE {$_values = new StringValue($strVal.text);} | intVal = INT_VALUE {$_values = new IntValue($intVal.int);} | NULL {$_values = new NullValue();} | lstVal = listValue {$_values = $lstVal._listValue;};
 
-boolValue: TRUE | FALSE;
+boolValue returns[BoolValue _boolValue]: TRUE {$_boolValue = new BoolValue(true);} | FALSE {$_boolValue = new BoolValue(false);};
 
-listValue: LBRACK methodCallArguments RBRACK;
+listValue returns[ListValue _listValue]: LBRACK mthdCllArgs = methodCallArguments RBRACK {$_listValue = new ListValue($mthdCllArgs._methodCallArguments);};
 
 identifier returns[Identifier id]: name = IDENTIFIER {$id = new Identifier($name.text);};
 
