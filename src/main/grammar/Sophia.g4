@@ -82,7 +82,7 @@ primitiveDataType: INT | STRING | BOOLEAN;
 
 methodBody returns[ArrayList<Statement> body]: {$body = new ArrayList();} (varDeclaration)* (statement)*;
 
-statement: forStatement | foreachStatement | ifStatement | assignmentStatement | printStatement | continueBreakStatement | methodCallStatement | returnStatement | block;
+statement returns[Statement _statement]: forStatement | foreachStatement | ifStatement | assignmentStatement | prntStmt = printStatement {$_statement = $prntStmt.printStmt} | cntnuStatement = continueBreakStatement| methodCallStatement | returnStatement | block;
 
 block: LBRACE (statement)* RBRACE;
 
@@ -90,7 +90,7 @@ assignmentStatement: assignment SEMICOLLON;
 
 assignment: orExpression ASSIGN expression;
 
-printStatement: PRINT LPAR expression RPAR SEMICOLLON;
+printStatement returns[PrintStmt printStmt]: PRINT LPAR exp1 = expression {$printStmt = new PrintStmt($exp1._expression)} RPAR SEMICOLLON;
 
 returnStatement: RETURN expression? SEMICOLLON;
 
@@ -108,7 +108,7 @@ foreachStatement: FOREACH LPAR identifier IN expression RPAR statement;
 
 ifStatement: IF LPAR expression RPAR statement (ELSE statement)?;
 
-expression: orExpression (ASSIGN expression)?;
+expression returns[Expression _expression]: orExpression (ASSIGN expression)?;
 
 orExpression: andExpression (OR andExpression)*;
 
