@@ -82,7 +82,7 @@ primitiveDataType: INT | STRING | BOOLEAN;
 
 methodBody returns[ArrayList<Statement> body]: {$body = new ArrayList();} (varDeclaration)* (statement)*;
 
-statement returns[Statement _statement]: forStatement | foreachStatement | ifStatement | assignmentStatement | prntStmt = printStatement {$_statement = $prntStmt._printStatement;} | cntnuBrkStmt = continueBreakStatement {$_statement = $cntnuBrkStmt._continueBreakStatement;} | mthdcall = methodCallStatement {$_statement = $mthdcall._methodCallStatement;} | rtrnStmt = returnStatement {$_statement = $rtrnStmt._returnStatement;} | blck = block {$_statement = blck._block;};
+statement returns[Statement _statement]: forStatement | foreachStatement | ifStatement | assignmentStatement | prntStmt = printStatement {$_statement = $prntStmt._printStatement;} | cntnuBrkStmt = continueBreakStatement {$_statement = $cntnuBrkStmt._continueBreakStatement;} | mthdcall = methodCallStatement {$_statement = $mthdcall._methodCallStatement;} | rtrnStmt = returnStatement {$_statement = $rtrnStmt._returnStatement;} | blck = block {$_statement = $blck._block;};
 
 block returns[BlockStmt _block]: {$_block = new BlockStmt();} LBRACE (stmt = statement {$_block.addStatement($stmt._statement);})* RBRACE;
 
@@ -92,9 +92,9 @@ assignment: orExpression ASSIGN expression;
 
 printStatement returns[PrintStmt _printStatement]: PRINT LPAR exp1 = expression {$_printStatement = new PrintStmt($exp1._expression);} RPAR SEMICOLLON;
 
-returnStatement returns[ReturnStmt _returnStatement]: RETURN (exp1 = expression)? {%_returnStatement = new ReturnStmt(); if ($exp1.text != null) %_returnStatement.setReturnedExpr($exp1._expression);} SEMICOLLON;
+returnStatement returns[ReturnStmt _returnStatement]: RETURN (exp1 = expression)? {$_returnStatement = new ReturnStmt(); if ($exp1.text != null) $_returnStatement.setReturnedExpr($exp1._expression);} SEMICOLLON;
 
-methodCallStatement returns[MethodCallStmt _methodCallStatement]: mthdcall = methodCall {$_methodCallStatement = ($mthdcall._methodCall);} SEMICOLLON;
+methodCallStatement returns[MethodCallStmt _methodCallStatement]: mthdcall = methodCall {$_methodCallStatement = new MethodCallStmt($mthdcall._methodCall);} SEMICOLLON;
 
 methodCall returns[MethodCall _methodCall]: otherExpression ((LPAR methodCallArguments RPAR) | (DOT identifier) | (LBRACK expression RBRACK))* (LPAR methodCallArguments RPAR);
 
@@ -122,12 +122,14 @@ additiveExpression: multiplicativeExpression ((PLUS | MINUS) multiplicativeExpre
 
 multiplicativeExpression: preUnaryExpression ((MULT | DIVIDE | MOD) preUnaryExpression)*;
 
-preUnaryExpression returns[UnaryExpression _preUnaryExpression, UnaryOperator operator]: ((NOT {$operator = not;} | MINUS {$operator = minus;} | INCREMENT {$operator = preinc;} | DECREMENT {$operator = predec;} ) preUnryExp = preUnaryExpression) {$_preUnaryExpression = new UnaryExpression($preUnryExp._preUnaryExpression, $operator);} | pstUnryExp = postUnaryExpression {$_preUnaryExpression = $pstUnryExp._postUnaryExpression;};
+preUnaryExpression returns[Expression _preUnaryExpression, UnaryOperator operator]: ((NOT {$operator = UnaryOperator.not;} | MINUS {$operator = UnaryOperator.minus;} | INCREMENT {$operator = UnaryOperator.preinc;} | DECREMENT {$operator = UnaryOperator.predec;} ) preUnryExp = preUnaryExpression) {$_preUnaryExpression = new UnaryExpression($preUnryExp._preUnaryExpression, $operator);} | pstUnryExp = postUnaryExpression {$_preUnaryExpression = $pstUnryExp._postUnaryExpression;};
 
-postUnaryExpression returns[Expression _postUnaryExpression, UnaryOperator operator]: acssExp = accessExpression (inc = INCREMENT {$operator = postinc;} | dec = DECREMENT {$operator = postdec;})?
+postUnaryExpression returns[Expression _postUnaryExpression, UnaryOperator operator]: acssExp = accessExpression (inc = INCREMENT {$operator = UnaryOperator.postinc;} | dec = DECREMENT {$operator = UnaryOperator.postdec;})?
     {
-        if (($inc.text == null) && ($dec.text == null)) $_postUnaryExpression = $acssExp._accessExpression;
-        else $_postUnaryExpression = UnaryExpression($acssExp._accessExpression, $operator);
+        if (($inc.text == null) && ($dec.text == null))
+            $_postUnaryExpression = $acssExp._accessExpression;
+        else
+            $_postUnaryExpression = new UnaryExpression($acssExp._accessExpression, $operator);
     };
 
 accessExpression returns[Expression _accessExpression]: otherExpression ((LPAR methodCallArguments RPAR) | (DOT identifier) | (LBRACK expression RBRACK))*;
