@@ -22,7 +22,8 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(Program program) {
-        //Todo
+        System.out.println("Line:"+program.getLine()+":"+program.toString());
+
         return null;
     }
 

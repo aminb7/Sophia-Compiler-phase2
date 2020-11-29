@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import parsers.SophiaLexer;
 import parsers.SophiaParser;
+import main.visitor.ASTTreePrinter;
 
 public class SophiaCompiler {
     public void compile(CharStream textStream) {
@@ -14,7 +15,8 @@ public class SophiaCompiler {
         Program program = sophiaParser.sophia().sophiaProgram;
 
         //Todo
-
+        ASTTreePrinter aSTTreePrinter = new ASTTreePrinter();
+        aSTTreePrinter.visit(program);
     }
 
 }

@@ -18,9 +18,9 @@ grammar Sophia;
     import main.ast.nodes.statement.loop.*;
 }
 
-sophia returns[Program sophiaProgram]: program EOF;
+sophia returns[Program sophiaProgram]: p = program {$sophiaProgram = $p.prog;} EOF;
 
-program returns[Program prog]: {$prog = new Program();} (classDec = sophiaClass {$prog.addClass($classDec.classDec);})*;
+program returns[Program prog]: {$prog = new Program(); $prog.setLine(1);} (classDec = sophiaClass {$prog.addClass($classDec.classDec);})*;
 
 sophiaClass returns[ClassDeclaration classDec]: CLASS name = identifier (EXTENDS parent = identifier)?
 	{
@@ -137,7 +137,7 @@ returnStatement returns[ReturnStmt _returnStatement]: RETURN (exp1 = expression)
 
 methodCallStatement returns[MethodCallStmt _methodCallStatement]: mthdcall = methodCall {$_methodCallStatement = new MethodCallStmt($mthdcall._methodCall);} SEMICOLLON;
 
-methodCall returns[MethodCall _methodCall, Expression _expression]: othrExpr = otherExpression {$_expression = $othrExpr._otherExpression;} ((LPAR mthdCllArgs = methodCallArguments RPAR) {$_expression = new MethodCall($_expression, $mthdCllArgs._methodCallArguments);} | (DOT idntfr = identifier) {$_expression = new ObjectOrListMemberAccess($_expression, $idntfr.id);} | (LBRACK exp1 = expression RBRACK) {$_expression = new ListAccessByIndex($_expression, $exp1._expression);})* (LPAR mthdCllArgs = methodCallArguments RPAR) {$_methodCall = new MethodCall($_expression, $mthdCllArgs._methodCallArguments);};
+methodCall returns[MethodCall _methodCall] locals[Expression _expression]: othrExpr = otherExpression {$_expression = $othrExpr._otherExpression;} ((LPAR mthdCllArgs = methodCallArguments RPAR) {$_expression = new MethodCall($_expression, $mthdCllArgs._methodCallArguments);} | (DOT idntfr = identifier) {$_expression = new ObjectOrListMemberAccess($_expression, $idntfr.id);} | (LBRACK exp1 = expression RBRACK) {$_expression = new ListAccessByIndex($_expression, $exp1._expression);})* (LPAR mthdCllArgs = methodCallArguments RPAR) {$_methodCall = new MethodCall($_expression, $mthdCllArgs._methodCallArguments);};
 
 methodCallArguments returns[ArrayList<Expression> _methodCallArguments]: {$_methodCallArguments = new ArrayList<>();} (expr1 = expression {$_methodCallArguments.add($expr1._expression);} (COMMA expr2 = expression {$_methodCallArguments.add($expr2._expression);})*)?;
 
@@ -218,9 +218,9 @@ multiplicativeExpression returns[Expression _mult]: e1 = preUnaryExpression {$_m
         	$_mult = new BinaryExpression($_mult, $e2._preUnaryExpression, BinaryOperator.mod);
 	}
 	)*;
-preUnaryExpression returns[Expression _preUnaryExpression, UnaryOperator operator]: ((NOT {$operator = UnaryOperator.not;} | MINUS {$operator = UnaryOperator.minus;} | INCREMENT {$operator = UnaryOperator.preinc;} | DECREMENT {$operator = UnaryOperator.predec;} ) preUnryExp = preUnaryExpression) {$_preUnaryExpression = new UnaryExpression($preUnryExp._preUnaryExpression, $operator);} | pstUnryExp = postUnaryExpression {$_preUnaryExpression = $pstUnryExp._postUnaryExpression;};
+preUnaryExpression returns[Expression _preUnaryExpression] locals[UnaryOperator operator]: ((NOT {$operator = UnaryOperator.not;} | MINUS {$operator = UnaryOperator.minus;} | INCREMENT {$operator = UnaryOperator.preinc;} | DECREMENT {$operator = UnaryOperator.predec;} ) preUnryExp = preUnaryExpression) {$_preUnaryExpression = new UnaryExpression($preUnryExp._preUnaryExpression, $operator);} | pstUnryExp = postUnaryExpression {$_preUnaryExpression = $pstUnryExp._postUnaryExpression;};
 
-postUnaryExpression returns[Expression _postUnaryExpression, UnaryOperator operator]: acssExp = accessExpression (inc = INCREMENT {$operator = UnaryOperator.postinc;} | dec = DECREMENT {$operator = UnaryOperator.postdec;})?
+postUnaryExpression returns[Expression _postUnaryExpression] locals[UnaryOperator operator]: acssExp = accessExpression (inc = INCREMENT {$operator = UnaryOperator.postinc;} | dec = DECREMENT {$operator = UnaryOperator.postdec;})?
     {
         if (($inc.text == null) && ($dec.text == null))
             $_postUnaryExpression = $acssExp._accessExpression;
