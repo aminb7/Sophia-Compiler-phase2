@@ -13,11 +13,8 @@ public class SophiaCompiler {
         CommonTokenStream tokenStream = new CommonTokenStream(sophiaLexer);
         SophiaParser sophiaParser = new SophiaParser(tokenStream);
         Program program = sophiaParser.sophia().sophiaProgram;
-
         ASTTreePrinter ast = new ASTTreePrinter();
         ast.visit(program);
-
-
     }
 
 }

@@ -24,7 +24,7 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(Program program) {
-        System.out.println(program.toString());
+        System.out.println("Line:"+program.getLine()+":"+program.toString());
         ArrayList<ClassDeclaration> classes = program.getClasses();
         for (ClassDeclaration classDec : classes)
             classDec.accept(this);
@@ -33,8 +33,10 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(ClassDeclaration classDeclaration) {
-        System.out.println(classDeclaration.toString());
+        System.out.println("Line:"+classDeclaration.getLine()+":"+classDeclaration.toString());
         classDeclaration.getClassName().accept(this);
+        if (classDeclaration.getParentClassName() != null)
+            classDeclaration.getParentClassName().accept(this);
         ArrayList<FieldDeclaration> fields = classDeclaration.getFields();
         ConstructorDeclaration constructor = classDeclaration.getConstructor();
         ArrayList<MethodDeclaration> methods = classDeclaration.getMethods();
@@ -48,7 +50,7 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(ConstructorDeclaration constructorDeclaration) {
-        System.out.println(constructorDeclaration.toString());
+        System.out.println("Line:"+constructorDeclaration.getLine()+":"+constructorDeclaration.toString());
         constructorDeclaration.getMethodName().accept(this);
         ArrayList<VarDeclaration> args = constructorDeclaration.getArgs();
         for (VarDeclaration arg : args)
@@ -64,7 +66,7 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(MethodDeclaration methodDeclaration) {
-        System.out.println(methodDeclaration.toString());
+        System.out.println("Line:"+methodDeclaration.getLine()+":"+methodDeclaration.toString());
         methodDeclaration.getMethodName().accept(this);
         ArrayList<VarDeclaration> args = methodDeclaration.getArgs();
         for (VarDeclaration arg : args)
@@ -80,21 +82,21 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(FieldDeclaration fieldDeclaration) {
-        System.out.println(fieldDeclaration.toString());
+        System.out.println("Line:"+fieldDeclaration.getLine()+":"+fieldDeclaration.toString());
         fieldDeclaration.getVarDeclaration().accept(this);
         return null;
     }
 
     @Override
     public Void visit(VarDeclaration varDeclaration) {
-        System.out.println(varDeclaration.toString());
+        System.out.println("Line:"+varDeclaration.getLine()+":"+varDeclaration.toString());
         varDeclaration.getVarName().accept(this);
         return null;
     }
 
     @Override
     public Void visit(AssignmentStmt assignmentStmt) {
-        System.out.println(assignmentStmt.toString());
+        System.out.println("Line:"+assignmentStmt.getLine()+":"+assignmentStmt.toString());
         assignmentStmt.getlValue().accept(this);
         assignmentStmt.getrValue().accept(this);
         return null;
@@ -102,7 +104,7 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(BlockStmt blockStmt) {
-        System.out.println(blockStmt.toString());
+        System.out.println("Line:"+blockStmt.getLine()+":"+blockStmt.toString());
         ArrayList<Statement> block = blockStmt.getStatements();
         for (Statement s : block)
             s.accept(this);
@@ -111,7 +113,7 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(ConditionalStmt conditionalStmt) {
-        System.out.println(conditionalStmt.toString());
+        System.out.println("Line:"+conditionalStmt.getLine()+":"+conditionalStmt.toString());
         conditionalStmt.getCondition().accept(this);
         conditionalStmt.getThenBody().accept(this);
         if (conditionalStmt.getElseBody() != null)
@@ -121,40 +123,40 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(MethodCallStmt methodCallStmt) {
-        System.out.println(methodCallStmt.toString());
+        System.out.println("Line:"+methodCallStmt.getLine()+":"+methodCallStmt.toString());
         methodCallStmt.getMethodCall().accept(this);
         return null;
     }
 
     @Override
     public Void visit(PrintStmt print) {
-        System.out.println(print.toString());
+        System.out.println("Line:"+print.getLine()+":"+print.toString());
         print.getArg().accept(this);
         return null;
     }
 
     @Override
     public Void visit(ReturnStmt returnStmt) {
-        System.out.println(returnStmt.toString());
+        System.out.println("Line:"+returnStmt.getLine()+":"+returnStmt.toString());
         returnStmt.getReturnedExpr().accept(this);
         return null;
     }
 
     @Override
     public Void visit(BreakStmt breakStmt) {
-        System.out.println(breakStmt.toString());
+        System.out.println("Line:"+breakStmt.getLine()+":"+breakStmt.toString());
         return null;
     }
 
     @Override
     public Void visit(ContinueStmt continueStmt) {
-        System.out.println(continueStmt.toString());
+        System.out.println("Line:"+continueStmt.getLine()+":"+continueStmt.toString());
         return null;
     }
 
     @Override
     public Void visit(ForeachStmt foreachStmt) {
-        System.out.println(foreachStmt.toString());
+        System.out.println("Line:"+foreachStmt.getLine()+":"+foreachStmt.toString());
         foreachStmt.getVariable().accept(this);
         foreachStmt.getList().accept(this);
         foreachStmt.getBody().accept(this);
@@ -163,7 +165,7 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(ForStmt forStmt) {
-        System.out.println(forStmt.toString());
+        System.out.println("Line:"+forStmt.getLine()+":"+forStmt.toString());
         forStmt.getInitialize().accept(this);
         forStmt.getCondition().accept(this);
         forStmt.getUpdate().accept(this);
@@ -173,7 +175,7 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(BinaryExpression binaryExpression) {
-        System.out.println(binaryExpression.toString());
+        System.out.println("Line:"+binaryExpression.getLine()+":"+binaryExpression.toString());
         binaryExpression.getFirstOperand().accept(this);
         binaryExpression.getSecondOperand().accept(this);
         return null;
@@ -181,14 +183,14 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(UnaryExpression unaryExpression) {
-        System.out.println(unaryExpression.toString());
+        System.out.println("Line:"+unaryExpression.getLine()+":"+unaryExpression.toString());
         unaryExpression.getOperand().accept(this);
         return null;
     }
 
     @Override
     public Void visit(ObjectOrListMemberAccess objectOrListMemberAccess) {
-        System.out.println(objectOrListMemberAccess.toString());
+        System.out.println("Line:"+objectOrListMemberAccess.getLine()+":"+objectOrListMemberAccess.toString());
         objectOrListMemberAccess.getInstance().accept(this);
         objectOrListMemberAccess.getMemberName().accept(this);
         return null;
@@ -196,13 +198,13 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(Identifier identifier) {
-        System.out.println(identifier.toString());
+        System.out.println("Line:"+identifier.getLine()+":"+identifier.toString());
         return null;
     }
 
     @Override
     public Void visit(ListAccessByIndex listAccessByIndex) {
-        System.out.println(listAccessByIndex.toString());
+        System.out.println("Line:"+listAccessByIndex.getLine()+":"+listAccessByIndex.toString());
         listAccessByIndex.getInstance().accept(this);
         listAccessByIndex.getIndex().accept(this);
         return null;
@@ -210,7 +212,7 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(MethodCall methodCall) {
-        System.out.println(methodCall.toString());
+        System.out.println("Line:"+methodCall.getLine()+":"+methodCall.toString());
         ArrayList<Expression> args = methodCall.getArgs();
         methodCall.getInstance().accept(this);
         for (Expression arg : args)
@@ -220,7 +222,7 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(NewClassInstance newClassInstance) {
-        System.out.println(newClassInstance.toString());
+        System.out.println("Line:"+newClassInstance.getLine()+":"+newClassInstance.toString());
         ArrayList<Expression> args = newClassInstance.getArgs();
         for (Expression arg : args)
             arg.accept(this);
@@ -229,13 +231,13 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(ThisClass thisClass) {
-        System.out.println(thisClass.toString());
+        System.out.println("Line:"+thisClass.getLine()+":"+thisClass.toString());
         return null;
     }
 
     @Override
     public Void visit(ListValue listValue) {
-        System.out.println(listValue.toString());
+        System.out.println("Line:"+listValue.getLine()+":"+listValue.toString());
         ArrayList<Expression>  elements = listValue.getElements();
         for (Expression element : elements)
             element.accept(this);
@@ -244,25 +246,25 @@ public class ASTTreePrinter extends Visitor<Void> {
 
     @Override
     public Void visit(NullValue nullValue) {
-        System.out.println(nullValue.toString());
+        System.out.println("Line:"+nullValue.getLine()+":"+nullValue.toString());
         return null;
     }
 
     @Override
     public Void visit(IntValue intValue) {
-        System.out.println(intValue.toString());
+        System.out.println("Line:"+intValue.getLine()+":"+intValue.toString());
         return null;
     }
 
     @Override
     public Void visit(BoolValue boolValue) {
-        System.out.println(boolValue.toString());
+        System.out.println("Line:"+boolValue.getLine()+":"+boolValue.toString());
         return null;
     }
 
     @Override
     public Void visit(StringValue stringValue) {
-        System.out.println(stringValue.toString());
+        System.out.println("Line:"+stringValue.getLine()+":"+stringValue.toString().replace("\"", ""));
         return null;
     }
 
