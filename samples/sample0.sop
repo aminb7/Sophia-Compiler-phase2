@@ -1,0 +1,7 @@
+
+class b extends b{
+    c: int;
+}
+class c extends b{
+    c: int;
+}

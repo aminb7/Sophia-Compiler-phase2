@@ -24,19 +24,27 @@ import main.symbolTable.items.*;
 import main.symbolTable.utils.Stack;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-public class NameAnalyzer extends Visitor<Void> {
-    private Stack stack;
+public class InterClassNameAnalyzer extends Visitor<Void> {
     private int numOfErrors;
+    private Stack stack;
     private SymbolTable root;
 
-    public NameAnalyzer() {
+    public InterClassNameAnalyzer() {
         stack = new Stack();
         numOfErrors = 0;
     }
 
+    public Stack getStack() {
+        return stack;
+    }
     public int getNumOfErrors() {
         return numOfErrors;
+    }
+    public SymbolTable getRoot() {
+        return root;
     }
 
     @Override
@@ -46,6 +54,7 @@ public class NameAnalyzer extends Visitor<Void> {
         ArrayList<ClassDeclaration> classes = program.getClasses();
         for (ClassDeclaration classDec : classes)
             classDec.accept(this);
+
         return null;
     }
 
@@ -57,16 +66,16 @@ public class NameAnalyzer extends Visitor<Void> {
         }
         catch (ItemAlreadyExistsException e) {
             System.out.println("Line:"+classDeclaration.getLine()+":Redefinition of "+classDeclaration.getClassName().getName());
-            classDeclaration.setClassName(new Identifier("%CLASS"+numOfErrors));
+            numOfErrors++;
+            classSymbolTableItem.setName(("%Class_"+numOfErrors));
             try {
                 root.put(classSymbolTableItem);
             }
             catch (ItemAlreadyExistsException exception) {
             }
-            numOfErrors++;
         }
         SymbolTable symbolTable = new SymbolTable();
-        classSymbolTableItem.setClassSymbolTable(new SymbolTable());
+        classSymbolTableItem.setClassSymbolTable(symbolTable);
         symbolTable.pre = root;
         stack.push(symbolTable);
 
@@ -93,6 +102,7 @@ public class NameAnalyzer extends Visitor<Void> {
         try {
             symbolTable.getItem("Field_" + constructorDeclaration.getMethodName().getName(), true);
             System.out.println("Line:" + constructorDeclaration.getLine() + ":Name of method " + constructorDeclaration.getMethodName().getName() + " conflicts with a field's name");
+            constructorDeclaration.haveConflict = true;
             numOfErrors++;
         } catch (ItemNotFoundException e) {
         }
@@ -101,6 +111,7 @@ public class NameAnalyzer extends Visitor<Void> {
             symbolTable.put(methodSymbolTableItem);
         } catch (ItemAlreadyExistsException e) {
             System.out.println("Line:" + constructorDeclaration.getLine() + ":Redefinition of method " + constructorDeclaration.getMethodName().getName());
+            constructorDeclaration.isRedefined = true;
             numOfErrors++;
         }
 
@@ -148,6 +159,7 @@ public class NameAnalyzer extends Visitor<Void> {
         try {
             symbolTable.getItem("Field_"+methodDeclaration.getMethodName().getName(), true);
             System.out.println("Line:"+methodDeclaration.getLine()+":Name of method "+methodDeclaration.getMethodName().getName()+" conflicts with a field's name");
+            methodDeclaration.haveConflict = true;
             numOfErrors++;
         }
         catch (ItemNotFoundException e) {
@@ -158,6 +170,7 @@ public class NameAnalyzer extends Visitor<Void> {
         }
         catch (ItemAlreadyExistsException e) {
             System.out.println("Line:"+methodDeclaration.getLine()+":Redefinition of method "+methodDeclaration.getMethodName().getName());
+            methodDeclaration.isRedefined = true;
             numOfErrors++;
         }
         SymbolTable methodSymbolTable = new SymbolTable();
@@ -207,8 +220,10 @@ public class NameAnalyzer extends Visitor<Void> {
         }
         catch (ItemAlreadyExistsException e) {
             System.out.println("Line:"+fieldDeclaration.getLine()+":Redefinition of field "+fieldDeclaration.getVarDeclaration().getVarName().getName());
+            fieldDeclaration.isRedefined = true;
             numOfErrors++;
         }
+
         stack.push(symbolTable);
 
         fieldDeclaration.getVarDeclaration().accept(this);

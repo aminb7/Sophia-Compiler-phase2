@@ -65,4 +65,35 @@ public class SymbolTable {
         throw new ItemNotFoundException();
     }
 
+    public ArrayList<SymbolTableItem> getAllItems(String key, Boolean searchCurrent){
+        ArrayList<SymbolTableItem> allItems = new ArrayList();
+
+        Set<SymbolTable> visitedSymbolTables = new HashSet<>();
+        SymbolTable currentSymbolTable = this;
+        if(!searchCurrent) {
+            visitedSymbolTables.add(this);
+            currentSymbolTable = this.pre;
+        }
+        while((currentSymbolTable != null) && (!visitedSymbolTables.contains(currentSymbolTable)) && (currentSymbolTable != this)) {
+            visitedSymbolTables.add( currentSymbolTable );
+            SymbolTableItem symbolTableItem = currentSymbolTable.items.get(key);
+            if( symbolTableItem != null )
+                allItems.add(symbolTableItem);
+            currentSymbolTable = currentSymbolTable.pre;
+        }
+        return allItems;
+    }
+
+    public boolean haveCircularInheritance(){
+        Set<SymbolTable> visitedSymbolTables = new HashSet<>();
+        SymbolTable currentSymbolTable = this.pre;
+        while(currentSymbolTable != null){
+            if (visitedSymbolTables.contains(currentSymbolTable))
+                return true;
+
+            visitedSymbolTables.add(currentSymbolTable);
+            currentSymbolTable = currentSymbolTable.pre;
+        }
+        return false;
+    }
 }

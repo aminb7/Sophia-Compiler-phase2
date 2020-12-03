@@ -51,7 +51,7 @@ sophiaClass returns[ClassDeclaration classDec]: c = CLASS name = identifier (EXT
     	h.setLine($varDec.varDec.getLine());
     	$classDec.addField(h);
 	}
-	| methodDec = method {if ($varDec.text != null) $classDec.addMethod($methodDec.methodDec); }
+	| methodDec = method {if ($methodDec.text != null) $classDec.addMethod($methodDec.methodDec); }
     )*)) RBRACE
 ;
 

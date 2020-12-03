@@ -8,8 +8,11 @@ import main.visitor.IVisitor;
 public class FieldDeclaration extends Declaration {
     VarDeclaration varDeclaration;
 
+    public boolean isRedefined;
+
     public FieldDeclaration(VarDeclaration varDeclaration) {
         this.varDeclaration = varDeclaration;
+        this.isRedefined = false;
     }
 
     public VarDeclaration getVarDeclaration() {

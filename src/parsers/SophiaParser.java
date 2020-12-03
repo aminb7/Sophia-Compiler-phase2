@@ -1,4 +1,4 @@
-// Generated from /home/sajjad/Desktop/compiler/Sophia-Compiler-phase2/src/main/grammar/Sophia.g4 by ANTLR 4.8
+// Generated from /home/amin/University/Semester5/PLC/Sophia-Compiler-phase2/src/main/grammar/Sophia.g4 by ANTLR 4.8
 package parsers;
 
     import main.ast.types.*;
@@ -458,7 +458,7 @@ public class SophiaParser extends Parser {
 						{
 						setState(140);
 						((SophiaClassContext)_localctx).methodDec = method();
-						if ((((SophiaClassContext)_localctx).varDec!=null?_input.getText(((SophiaClassContext)_localctx).varDec.start,((SophiaClassContext)_localctx).varDec.stop):null) != null) _localctx.classDec.addMethod(((SophiaClassContext)_localctx).methodDec.methodDec); 
+						if ((((SophiaClassContext)_localctx).methodDec!=null?_input.getText(((SophiaClassContext)_localctx).methodDec.start,((SophiaClassContext)_localctx).methodDec.stop):null) != null) _localctx.classDec.addMethod(((SophiaClassContext)_localctx).methodDec.methodDec); 
 						}
 						break;
 					default:
