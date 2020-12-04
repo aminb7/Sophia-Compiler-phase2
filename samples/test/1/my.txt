@@ -1,0 +1,109 @@
+class A extends B {
+    s: int;
+    def int d(){}
+}
+
+class B extends C {
+    s: string;
+    z: int;
+    d: bool;
+    def int c(){}
+    def int s(){}
+    def int d(){}
+    def int c(){}
+}
+
+class C extends A {
+    z: int;
+    s: int;
+    d: string;
+    def int c(){}
+}
+
+class D extends A {
+    s: int;
+    z: int;
+}
+
+class k extends s{
+    x: int;
+    def int x () {}
+}
+
+class s extends k{
+    x: int;
+    a: int;
+}
+
+class z {
+    def int z(){}
+}
+
+class zz extends z {
+    z: int;
+    def int z() {}
+}
+
+class A {
+    m: int;
+}
+
+class B extends A {
+        m :int ;
+
+        def  string  m ()
+        { }
+}
+
+class m {
+    a:int;
+    a:int;
+    a:int;
+    def void a() {
+
+    }
+    def void a() {
+
+    }
+}
+
+class mamd{
+    def int mamad(a: int) {
+        b: int;
+    }
+}
+
+class A extends B{
+    a: int;
+}
+
+class B {
+    a: int;
+}
+
+class mamd{
+    a: int;
+    b: int;
+    a: int;
+    def int a(a: int, c: int){
+        c: string;
+    }
+    def mamd(b: int){
+        c: string;
+    }
+    def string mamd(a: int){
+        a: int;
+    }
+}
+
+class mamd{
+    def int mamd(x:int) {
+        x: stirng;
+        a: bool;
+        return a;
+    }
+    mamd: int;
+    def string mamd() {}
+}
+
+class mamd{}

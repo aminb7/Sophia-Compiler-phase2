@@ -1,0 +1,73 @@
+class Cart {
+  orders: list(count: int, item: Item, string, string, Price);
+  def Cart(count: int, item:Item, name: string) {
+    this.orders[0] = count;
+    this.orders.item = item;
+    this.orders[2] = "Cart Is Added";
+  }
+  def int showPrice() {
+    p: int;
+    i: int;
+    a: int;
+    b: int;
+    p = a || b && a++ * i + a < 2 == b % p;
+    return p - i;
+  }
+  customer: Customer;
+  def void pointless() {
+    c: int;
+    c = customer.a().b()() * c - customer.address[i%3] / this.orders[n];
+    if (c && this.pointless())
+        return;
+    else {
+        c = new Customer("a", 0, "nowhere");
+        print("No user");
+    }
+    foreach (a in arr) {
+        doNothing();
+        continue;
+    }
+
+
+  }
+
+}
+class Customer extends Person {
+    name: string;
+    age: int;
+    address: string;
+    def Customer(name: string, age: int, address: string) {
+        this.name = "Welcome back " + name;
+        this.age = age;
+        this.address = "You live at " + address;
+    }
+    def void a() {
+
+    }
+}
+class Person {
+
+}
+
+class Main{
+  def Main() {
+    cart: Cart;
+    i: int;
+    total: int;
+    order: list(string, int, int);
+    product: list(string, int);
+    productCatalog: list(4 # list(string, int));
+    productCatalog = [["Doughnut", 5000], ["Croissant", 4000],
+                      ["Cookies", 2000],
+                      ["Chocolate Cake", 8000]];
+    cart = new Cart();
+    for (i = 0; i < 4; i = i + 1) {
+      product = productCatalog[i];
+      order = [product[0], product[1], i + 1];
+      cart.addToCart(order, i);
+    }
+    total = cart.getSum();
+    print(total);
+    print("\n");
+  }
+}

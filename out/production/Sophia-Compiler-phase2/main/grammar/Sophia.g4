@@ -87,8 +87,8 @@ variableWithType returns[VarDeclaration varDec]: name = identifier COLON t = typ
 
 type returns[Type _type]: pdt = primitiveDataType {$_type = $pdt._primitive;}
 	| lt = listType {$_type = $lt._listType;}
-	| functionPointerType
-	| classType {$_type = new IntType();};
+	| fp = functionPointerType {$_type = $fp._fptrType;}
+	| ct = classType {$_type = $ct._classType;};
 
 classType returns[ClassType _classType]: iden = identifier {$_classType = new ClassType($iden.id);};
 
@@ -107,10 +107,12 @@ listItemType returns[ListNameType _listItemType]:
 
 functionPointerType returns[FptrType _fptrType]: FUNC LESS_THAN (v = VOID | args = typesWithComma) ARROW (isVoid = VOID | returnType = type) GREATER_THAN
 	{
-		if ($isVoid.text == null)
+		if ($isVoid.text != null){
 			$_fptrType = new FptrType($args._typesWithComma, new NullType());
-		else
+		}
+		else{
 			$_fptrType = new FptrType($args._typesWithComma, $returnType._type);
+        }
 	};
 
 typesWithComma returns[ArrayList<Type> _typesWithComma]: {$_typesWithComma = new ArrayList();}
@@ -121,7 +123,7 @@ primitiveDataType returns[Type _primitive]:
 	INT {$_primitive = new IntType();}
 	| STRING {$_primitive = new StringType();}
 	| BOOLEAN {$_primitive = new BoolType();};
-// injaaaaaaaaaaaaaaa
+
 methodBody returns[ArrayList<Statement> body, ArrayList<VarDeclaration> localVars]: {$body = new ArrayList(); $localVars = new ArrayList();}
 	(varDec = varDeclaration {$localVars.add($varDec.varDec);})*
 	(stmt = statement {$body.add($stmt._statement);})*;
@@ -146,7 +148,14 @@ assignment returns[AssignmentStmt assign]: or = orExpression as = ASSIGN exp = e
 
 printStatement returns[PrintStmt _printStatement]: p = PRINT LPAR exp1 = expression {$_printStatement = new PrintStmt($exp1._expression); $_printStatement.setLine($p.getLine());} RPAR SEMICOLLON;
 
-returnStatement returns[ReturnStmt _returnStatement]: r = RETURN (exp1 = expression)? {$_returnStatement = new ReturnStmt(); if ($exp1.text != null) $_returnStatement.setReturnedExpr($exp1._expression); $_returnStatement.setLine($r.getLine());} SEMICOLLON;
+returnStatement returns[ReturnStmt _returnStatement]: r = RETURN (exp1 = expression)?
+    {$_returnStatement = new ReturnStmt();
+        if ($exp1.text != null)
+            $_returnStatement.setReturnedExpr($exp1._expression);
+        else
+            $_returnStatement.getReturnedExpr().setLine($r.getLine());
+        $_returnStatement.setLine($r.getLine());
+    } SEMICOLLON;
 
 methodCallStatement returns[MethodCallStmt _methodCallStatement]: mthdcall = methodCall {$_methodCallStatement = new MethodCallStmt($mthdcall._methodCall); $_methodCallStatement.setLine($mthdcall._methodCall.getLine());} SEMICOLLON;
 
