@@ -111,7 +111,9 @@ public class InnerClassNameAnalyzer extends Visitor<Void> {
 
         try {
             symbolTable.put(methodSymbolTableItem);
+            symbolTable.allMathodss.add(methodSymbolTableItem);
         } catch (ItemAlreadyExistsException e) {
+            symbolTable.allMathodss.add(methodSymbolTableItem);
             System.out.println("Line:" + constructorDeclaration.getLine() + ":Redefinition of method " + constructorDeclaration.getMethodName().getName());
             constructorDeclaration.isRedefined = true;
             numOfErrors++;
@@ -169,8 +171,10 @@ public class InnerClassNameAnalyzer extends Visitor<Void> {
 
         try {
             symbolTable.put(methodSymbolTableItem);
+            symbolTable.allMathodss.add(methodSymbolTableItem);
         }
         catch (ItemAlreadyExistsException e) {
+            symbolTable.allMathodss.add(methodSymbolTableItem);
             System.out.println("Line:"+methodDeclaration.getLine()+":Redefinition of method "+methodDeclaration.getMethodName().getName());
             methodDeclaration.isRedefined = true;
             numOfErrors++;

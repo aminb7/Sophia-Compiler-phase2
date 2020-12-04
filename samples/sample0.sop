@@ -1,7 +1,8 @@
 
-class b extends b{
-    c: int;
+class a{
+    def f(){}
+    def void f(){}
 }
-class c extends b{
-    c: int;
+class b extends a{
+    f: int;
 }

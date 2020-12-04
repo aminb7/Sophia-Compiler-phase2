@@ -4,6 +4,7 @@ package main.symbolTable;
 import main.symbolTable.exceptions.ItemAlreadyExistsException;
 import main.symbolTable.exceptions.ItemNotFoundException;
 import main.symbolTable.items.SymbolTableItem;
+import main.symbolTable.items.MethodSymbolTableItem;
 import main.symbolTable.utils.Stack;
 
 import java.util.*;
@@ -17,6 +18,7 @@ public class SymbolTable {
     public static SymbolTable top;
     public static SymbolTable root;
     private static Stack<SymbolTable> stack = new Stack<>();
+    public ArrayList<SymbolTableItem> allMathodss;
 
     public static void push(SymbolTable symbolTable) {
         if (top != null)
@@ -35,6 +37,7 @@ public class SymbolTable {
 
     public SymbolTable() {
         this(null);
+        allMathodss = new ArrayList();
     }
 
     public SymbolTable(SymbolTable pre) {
@@ -79,6 +82,13 @@ public class SymbolTable {
             SymbolTableItem symbolTableItem = currentSymbolTable.items.get(key);
             if( symbolTableItem != null )
                 allItems.add(symbolTableItem);
+
+            for (SymbolTableItem item : currentSymbolTable.allMathodss){
+                MethodSymbolTableItem methodItem = (MethodSymbolTableItem) item;
+                if (("Method_" + methodItem.getMethodDeclaration().getMethodName().getName()).equals(key))
+                    allItems.add(item);
+            }
+
             currentSymbolTable = currentSymbolTable.pre;
         }
         return allItems;
