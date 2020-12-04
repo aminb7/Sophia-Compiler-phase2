@@ -27,12 +27,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class InterClassNameAnalyzer extends Visitor<Void> {
+public class InnerClassNameAnalyzer extends Visitor<Void> {
     private int numOfErrors;
     private Stack stack;
     private SymbolTable root;
 
-    public InterClassNameAnalyzer() {
+    public InnerClassNameAnalyzer() {
         stack = new Stack();
         numOfErrors = 0;
     }
@@ -104,7 +104,7 @@ public class InterClassNameAnalyzer extends Visitor<Void> {
         try {
             symbolTable.getItem("Field_" + constructorDeclaration.getMethodName().getName(), true);
             System.out.println("Line:" + constructorDeclaration.getLine() + ":Name of method " + constructorDeclaration.getMethodName().getName() + " conflicts with a field's name");
-            constructorDeclaration.haveConflict = true;
+            constructorDeclaration.hasConflict = true;
             numOfErrors++;
         } catch (ItemNotFoundException e) {
         }
@@ -161,7 +161,7 @@ public class InterClassNameAnalyzer extends Visitor<Void> {
         try {
             symbolTable.getItem("Field_"+methodDeclaration.getMethodName().getName(), true);
             System.out.println("Line:"+methodDeclaration.getLine()+":Name of method "+methodDeclaration.getMethodName().getName()+" conflicts with a field's name");
-            methodDeclaration.haveConflict = true;
+            methodDeclaration.hasConflict = true;
             numOfErrors++;
         }
         catch (ItemNotFoundException e) {

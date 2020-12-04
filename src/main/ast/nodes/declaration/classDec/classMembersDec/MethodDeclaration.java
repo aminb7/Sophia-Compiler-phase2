@@ -20,14 +20,14 @@ public class MethodDeclaration extends Declaration {
     protected boolean doesReturn;
 
     public boolean isRedefined;
-    public boolean haveConflict;
+    public boolean hasConflict;
 
     //returnType NullType on when it is Void
     public MethodDeclaration(Identifier methodName, Type returnType) {
         this.methodName = methodName;
         this.returnType = returnType;
         this.isRedefined = false;
-        this.haveConflict = false;
+        this.hasConflict = false;
     }
 
     public Identifier getMethodName() {

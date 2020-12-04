@@ -2,8 +2,8 @@ package main;
 
 import main.ast.nodes.Program;
 import main.visitor.ASTTreePrinter;
-import main.visitor.InterClassNameAnalyzer;
-import main.visitor.InfraClassNameAnalyzer;
+import main.visitor.InnerClassNameAnalyzer;
+import main.visitor.OuterClassNameAnalyzer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import parsers.SophiaLexer;
@@ -18,13 +18,13 @@ public class SophiaCompiler {
         Program program = sophiaParser.sophia().sophiaProgram;
         ASTTreePrinter astTreePrinter = new ASTTreePrinter();
 
-        InterClassNameAnalyzer interClassNameAnalyzer = new InterClassNameAnalyzer();
-        interClassNameAnalyzer.visit(program);
+        InnerClassNameAnalyzer innerClassNameAnalyzer = new InnerClassNameAnalyzer();
+        innerClassNameAnalyzer.visit(program);
 
-        InfraClassNameAnalyzer infraClassNameAnalyzer = new InfraClassNameAnalyzer(interClassNameAnalyzer.getStack(), interClassNameAnalyzer.getRoot());
-        infraClassNameAnalyzer.visit(program);
+        OuterClassNameAnalyzer outerClassNameAnalyzer = new OuterClassNameAnalyzer(innerClassNameAnalyzer.getStack(), innerClassNameAnalyzer.getRoot());
+        outerClassNameAnalyzer.visit(program);
 
-        if (interClassNameAnalyzer.getNumOfErrors() + infraClassNameAnalyzer.getNumOfErrors() == 0)
+        if (innerClassNameAnalyzer.getNumOfErrors() + outerClassNameAnalyzer.getNumOfErrors() == 0)
             astTreePrinter.visit(program);
     }
 }

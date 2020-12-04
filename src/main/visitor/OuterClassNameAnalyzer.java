@@ -29,12 +29,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class InfraClassNameAnalyzer extends Visitor<Void> {
+public class OuterClassNameAnalyzer extends Visitor<Void> {
     private Stack stack;
     private int numOfErrors;
     private SymbolTable root;
 
-    public InfraClassNameAnalyzer(Stack _stack, SymbolTable _root) {
+    public OuterClassNameAnalyzer(Stack _stack, SymbolTable _root) {
         stack = _stack;
         numOfErrors = 0;
         root = _root;
@@ -126,12 +126,12 @@ public class InfraClassNameAnalyzer extends Visitor<Void> {
             }
         }
 
-        if (!constructorDeclaration.haveConflict) {
+        if (!constructorDeclaration.hasConflict) {
             try {
                 classSymbolTable.getItem("Field_" + constructorDeclaration.getMethodName().getName(), false);
                 String errorMessage = "Line:"+constructorDeclaration.getLine()+":Name of method "+constructorDeclaration.getMethodName().getName()+" conflicts with a field's name";
                 System.out.println(errorMessage);
-                constructorDeclaration.haveConflict = true;
+                constructorDeclaration.hasConflict = true;
                 numOfErrors++;
             }
             catch (ItemNotFoundException e) {
@@ -169,12 +169,12 @@ public class InfraClassNameAnalyzer extends Visitor<Void> {
             }
         }
 
-        if (!methodDeclaration.haveConflict) {
+        if (!methodDeclaration.hasConflict) {
             try {
                 classSymbolTable.getItem("Field_" + methodDeclaration.getMethodName().getName(), false);
                 String errorMessage = "Line:"+methodDeclaration.getLine()+":Name of method "+methodDeclaration.getMethodName().getName()+" conflicts with a field's name";
                 System.out.println(errorMessage);
-                methodDeclaration.haveConflict = true;
+                methodDeclaration.hasConflict = true;
                 numOfErrors++;
             }
             catch (ItemNotFoundException e) {
@@ -216,9 +216,9 @@ public class InfraClassNameAnalyzer extends Visitor<Void> {
         for (SymbolTableItem item : allItems) {
             MethodSymbolTableItem methodItem = (MethodSymbolTableItem) item;
             String errorMessage = "Line:"+methodItem.getMethodDeclaration().getLine()+":Name of method "+methodItem.getMethodDeclaration().getMethodName().getName()+" conflicts with a field's name";
-            if (!methodItem.getMethodDeclaration().haveConflict) {
+            if (!methodItem.getMethodDeclaration().hasConflict) {
                 System.out.println(errorMessage);
-                methodItem.getMethodDeclaration().haveConflict = true;
+                methodItem.getMethodDeclaration().hasConflict = true;
                 numOfErrors++;
             }
         }

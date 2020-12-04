@@ -7,12 +7,12 @@ import main.visitor.IVisitor;
 //line -> DEF
 public class ConstructorDeclaration extends MethodDeclaration{
     public boolean isRedefined;
-    public boolean haveConflict;
+    public boolean hasConflict;
 
     public ConstructorDeclaration(Identifier methodName) {
         super(methodName, new NullType());
         this.isRedefined = false;
-        this.haveConflict = false;
+        this.hasConflict = false;
     }
 
     @Override
