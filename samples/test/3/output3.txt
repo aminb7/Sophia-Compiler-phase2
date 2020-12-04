@@ -1,6 +1,0 @@
-Line:2:Name of method k conflicts with a field's name
-Line:3:Name of method k conflicts with a field's name
-Line:3:Redefinition of method k
-Line:8:Name of method k conflicts with a field's name
-Line:13:Redefinition of method k
-Line:13:Name of method k conflicts with a field's name
