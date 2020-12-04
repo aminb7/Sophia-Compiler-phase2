@@ -88,8 +88,10 @@ public class SymbolTable {
         Set<SymbolTable> visitedSymbolTables = new HashSet<>();
         SymbolTable currentSymbolTable = this.pre;
         while(currentSymbolTable != null){
-            if (visitedSymbolTables.contains(currentSymbolTable))
+            if (currentSymbolTable == this)
                 return true;
+            if (visitedSymbolTables.contains(currentSymbolTable))
+                return false;
 
             visitedSymbolTables.add(currentSymbolTable);
             currentSymbolTable = currentSymbolTable.pre;

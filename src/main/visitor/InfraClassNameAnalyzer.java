@@ -26,6 +26,8 @@ import main.symbolTable.items.SymbolTableItem;
 import main.symbolTable.utils.Stack;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class InfraClassNameAnalyzer extends Visitor<Void> {
     private Stack stack;
@@ -83,7 +85,8 @@ public class InfraClassNameAnalyzer extends Visitor<Void> {
             SymbolTable classSymbolTable = classSymbolTableItem.getClassSymbolTable();
 
             if (classSymbolTable.haveCircularInheritance()) {
-                System.out.println("Line:" + classDeclaration.getLine() + ":Class " + classDeclaration.getClassName().getName() + " is in an inheritance cycle");
+                String errorMessage = "Line:" + classDeclaration.getLine() + ":Class " + classDeclaration.getClassName().getName() + " is in an inheritance cycle";
+                System.out.println(errorMessage);
                 numOfErrors++;
             }
 
@@ -114,7 +117,8 @@ public class InfraClassNameAnalyzer extends Visitor<Void> {
         if (!constructorDeclaration.isRedefined) {
             try {
                 classSymbolTable.getItem("Method_" + constructorDeclaration.getMethodName().getName(), false);
-                System.out.println("Line:"+constructorDeclaration.getLine()+":Redefinition of method "+constructorDeclaration.getMethodName().getName());
+                String errorMessage = "Line:"+constructorDeclaration.getLine()+":Redefinition of method "+constructorDeclaration.getMethodName().getName();
+                System.out.println(errorMessage);
                 constructorDeclaration.isRedefined = true;
                 numOfErrors++;
             }
@@ -125,7 +129,8 @@ public class InfraClassNameAnalyzer extends Visitor<Void> {
         if (!constructorDeclaration.haveConflict) {
             try {
                 classSymbolTable.getItem("Field_" + constructorDeclaration.getMethodName().getName(), false);
-                System.out.println("Line:"+constructorDeclaration.getLine()+":Name of method "+constructorDeclaration.getMethodName().getName()+" conflicts with a field's name");
+                String errorMessage = "Line:"+constructorDeclaration.getLine()+":Name of method "+constructorDeclaration.getMethodName().getName()+" conflicts with a field's name";
+                System.out.println(errorMessage);
                 constructorDeclaration.haveConflict = true;
                 numOfErrors++;
             }
@@ -155,7 +160,8 @@ public class InfraClassNameAnalyzer extends Visitor<Void> {
         if (!methodDeclaration.isRedefined) {
             try {
                 classSymbolTable.getItem("Method_" + methodDeclaration.getMethodName().getName(), false);
-                System.out.println("Line:"+methodDeclaration.getLine()+":Redefinition of method "+methodDeclaration.getMethodName().getName());
+                String errorMessage = "Line:"+methodDeclaration.getLine()+":Redefinition of method "+methodDeclaration.getMethodName().getName();
+                System.out.println(errorMessage);
                 methodDeclaration.isRedefined = true;
                 numOfErrors++;
             }
@@ -166,7 +172,8 @@ public class InfraClassNameAnalyzer extends Visitor<Void> {
         if (!methodDeclaration.haveConflict) {
             try {
                 classSymbolTable.getItem("Field_" + methodDeclaration.getMethodName().getName(), false);
-                System.out.println("Line:"+methodDeclaration.getLine()+":Name of method "+methodDeclaration.getMethodName().getName()+" conflicts with a field's name");
+                String errorMessage = "Line:"+methodDeclaration.getLine()+":Name of method "+methodDeclaration.getMethodName().getName()+" conflicts with a field's name";
+                System.out.println(errorMessage);
                 methodDeclaration.haveConflict = true;
                 numOfErrors++;
             }
@@ -196,7 +203,8 @@ public class InfraClassNameAnalyzer extends Visitor<Void> {
         if (!fieldDeclaration.isRedefined) {
             try {
                 classSymbolTable.getItem("Field_" + fieldDeclaration.getVarDeclaration().getVarName().getName(), false);
-                System.out.println("Line:"+fieldDeclaration.getLine()+":Redefinition of field "+fieldDeclaration.getVarDeclaration().getVarName().getName());
+                String errorMessage = "Line:"+fieldDeclaration.getLine()+":Redefinition of field "+fieldDeclaration.getVarDeclaration().getVarName().getName();
+                System.out.println(errorMessage);
                 fieldDeclaration.isRedefined = true;
                 numOfErrors++;
             }
@@ -207,9 +215,12 @@ public class InfraClassNameAnalyzer extends Visitor<Void> {
         ArrayList<SymbolTableItem> allItems = classSymbolTable.getAllItems("Method_" + fieldDeclaration.getVarDeclaration().getVarName().getName(), false);
         for (SymbolTableItem item : allItems) {
             MethodSymbolTableItem methodItem = (MethodSymbolTableItem) item;
-            System.out.println("Line:"+methodItem.getMethodDeclaration().getLine()+":Name of method "+methodItem.getMethodDeclaration().getMethodName().getName()+" conflicts with a field's name");
-            methodItem.getMethodDeclaration().haveConflict = true;
-            numOfErrors++;
+            String errorMessage = "Line:"+methodItem.getMethodDeclaration().getLine()+":Name of method "+methodItem.getMethodDeclaration().getMethodName().getName()+" conflicts with a field's name";
+            if (!methodItem.getMethodDeclaration().haveConflict) {
+                System.out.println(errorMessage);
+                methodItem.getMethodDeclaration().haveConflict = true;
+                numOfErrors++;
+            }
         }
         // restore stack
         stack.push(classSymbolTable);

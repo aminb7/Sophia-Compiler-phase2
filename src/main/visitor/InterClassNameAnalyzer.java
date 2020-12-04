@@ -65,8 +65,10 @@ public class InterClassNameAnalyzer extends Visitor<Void> {
             root.put(classSymbolTableItem);
         }
         catch (ItemAlreadyExistsException e) {
-            System.out.println("Line:"+classDeclaration.getLine()+":Redefinition of "+classDeclaration.getClassName().getName());
+            System.out.println("Line:"+classDeclaration.getLine()+":Redefinition of class "+classDeclaration.getClassName().getName());
             numOfErrors++;
+
+            classDeclaration.setClassName(new Identifier("%Class_"+numOfErrors));
             classSymbolTableItem.setName(("%Class_"+numOfErrors));
             try {
                 root.put(classSymbolTableItem);
