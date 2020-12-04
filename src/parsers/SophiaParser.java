@@ -342,12 +342,7 @@ public class SophiaParser extends Parser {
 				}
 			}
 
-
-					((SophiaClassContext)_localctx).classDec =  new ClassDeclaration(((SophiaClassContext)_localctx).name.id);
-					if ((((SophiaClassContext)_localctx).parent!=null?_input.getText(((SophiaClassContext)_localctx).parent.start,((SophiaClassContext)_localctx).parent.stop):null) != null)
-						_localctx.classDec.setParentClassName(((SophiaClassContext)_localctx).parent.id);
-					_localctx.classDec.setLine(((SophiaClassContext)_localctx).c.getLine());
-				
+			 ((SophiaClassContext)_localctx).classDec =  new ClassDeclaration(((SophiaClassContext)_localctx).name.id); if ((((SophiaClassContext)_localctx).parent!=null?_input.getText(((SophiaClassContext)_localctx).parent.start,((SophiaClassContext)_localctx).parent.stop):null) != null) _localctx.classDec.setParentClassName(((SophiaClassContext)_localctx).parent.id); _localctx.classDec.setLine(((SophiaClassContext)_localctx).c.getLine()); 
 			setState(112);
 			match(LBRACE);
 			setState(148);
@@ -369,11 +364,7 @@ public class SophiaParser extends Parser {
 							{
 							setState(113);
 							((SophiaClassContext)_localctx).varDec1 = varDeclaration();
-
-									FieldDeclaration f = new FieldDeclaration(((SophiaClassContext)_localctx).varDec1.varDec);
-									f.setLine(((SophiaClassContext)_localctx).varDec1.varDec.getLine());
-									_localctx.classDec.addField(f);
-								
+							 FieldDeclaration f = new FieldDeclaration(((SophiaClassContext)_localctx).varDec1.varDec); f.setLine(((SophiaClassContext)_localctx).varDec1.varDec.getLine()); _localctx.classDec.addField(f); 
 							}
 							break;
 						case DEF:
@@ -407,11 +398,7 @@ public class SophiaParser extends Parser {
 						{
 						setState(126);
 						((SophiaClassContext)_localctx).varDec2 = varDeclaration();
-
-						   		FieldDeclaration g = new FieldDeclaration(((SophiaClassContext)_localctx).varDec2.varDec);
-						   		g.setLine(((SophiaClassContext)_localctx).varDec2.varDec.getLine());
-						    	_localctx.classDec.addField(g);
-						    
+						 FieldDeclaration g = new FieldDeclaration(((SophiaClassContext)_localctx).varDec2.varDec); g.setLine(((SophiaClassContext)_localctx).varDec2.varDec.getLine()); _localctx.classDec.addField(g); 
 						}
 						break;
 					case DEF:
@@ -447,11 +434,7 @@ public class SophiaParser extends Parser {
 						{
 						setState(137);
 						((SophiaClassContext)_localctx).varDec = varDeclaration();
-
-								FieldDeclaration h = new FieldDeclaration(((SophiaClassContext)_localctx).varDec.varDec);
-						    	h.setLine(((SophiaClassContext)_localctx).varDec.varDec.getLine());
-						    	_localctx.classDec.addField(h);
-							
+						 FieldDeclaration h = new FieldDeclaration(((SophiaClassContext)_localctx).varDec.varDec); h.setLine(((SophiaClassContext)_localctx).varDec.varDec.getLine()); _localctx.classDec.addField(h); 
 						}
 						break;
 					case DEF:
@@ -637,16 +620,7 @@ public class SophiaParser extends Parser {
 			((MethodContext)_localctx).body = methodBody();
 			setState(169);
 			match(RBRACE);
-
-					if ((((MethodContext)_localctx).v!=null?((MethodContext)_localctx).v.getText():null) == null)
-						((MethodContext)_localctx).methodDec =  new MethodDeclaration(((MethodContext)_localctx).name.id, ((MethodContext)_localctx).t._type);
-					else
-						((MethodContext)_localctx).methodDec =  new MethodDeclaration(((MethodContext)_localctx).name.id, new NullType());
-					_localctx.methodDec.setArgs(((MethodContext)_localctx).args.args);
-					_localctx.methodDec.setBody(((MethodContext)_localctx).body.body);
-					_localctx.methodDec.setLocalVars(((MethodContext)_localctx).body.localVars);
-					_localctx.methodDec.setLine(((MethodContext)_localctx).d.getLine());
-				
+			 if ((((MethodContext)_localctx).v!=null?((MethodContext)_localctx).v.getText():null) == null) ((MethodContext)_localctx).methodDec =  new MethodDeclaration(((MethodContext)_localctx).name.id, ((MethodContext)_localctx).t._type); else ((MethodContext)_localctx).methodDec =  new MethodDeclaration(((MethodContext)_localctx).name.id, new NullType()); _localctx.methodDec.setArgs(((MethodContext)_localctx).args.args); _localctx.methodDec.setBody(((MethodContext)_localctx).body.body); _localctx.methodDec.setLocalVars(((MethodContext)_localctx).body.localVars); _localctx.methodDec.setLine(((MethodContext)_localctx).d.getLine()); 
 			}
 		}
 		catch (RecognitionException re) {
@@ -721,13 +695,7 @@ public class SophiaParser extends Parser {
 			((ConstructorContext)_localctx).body = methodBody();
 			setState(179);
 			match(RBRACE);
-
-					((ConstructorContext)_localctx).c =  new ConstructorDeclaration(((ConstructorContext)_localctx).name.id);
-					_localctx.c.setArgs(((ConstructorContext)_localctx).args.args);
-			        _localctx.c.setBody(((ConstructorContext)_localctx).body.body);
-			        _localctx.c.setLocalVars(((ConstructorContext)_localctx).body.localVars);
-			        _localctx.c.setLine(((ConstructorContext)_localctx).d.getLine());
-				
+			 ((ConstructorContext)_localctx).c =  new ConstructorDeclaration(((ConstructorContext)_localctx).name.id); _localctx.c.setArgs(((ConstructorContext)_localctx).args.args); _localctx.c.setBody(((ConstructorContext)_localctx).body.body); _localctx.c.setLocalVars(((ConstructorContext)_localctx).body.localVars); _localctx.c.setLine(((ConstructorContext)_localctx).d.getLine()); 
 			}
 		}
 		catch (RecognitionException re) {
@@ -1349,14 +1317,7 @@ public class SophiaParser extends Parser {
 			}
 			setState(264);
 			match(GREATER_THAN);
-
-					if ((((FunctionPointerTypeContext)_localctx).isVoid!=null?((FunctionPointerTypeContext)_localctx).isVoid.getText():null) != null){
-						((FunctionPointerTypeContext)_localctx)._fptrType =  new FptrType(((FunctionPointerTypeContext)_localctx).args._typesWithComma, new NullType());
-					}
-					else{
-						((FunctionPointerTypeContext)_localctx)._fptrType =  new FptrType(((FunctionPointerTypeContext)_localctx).args._typesWithComma, ((FunctionPointerTypeContext)_localctx).returnType._type);
-			        }
-				
+			 if ((((FunctionPointerTypeContext)_localctx).isVoid!=null?((FunctionPointerTypeContext)_localctx).isVoid.getText():null) != null){ ((FunctionPointerTypeContext)_localctx)._fptrType =  new FptrType(((FunctionPointerTypeContext)_localctx).args._typesWithComma, new NullType()); } else{ ((FunctionPointerTypeContext)_localctx)._fptrType =  new FptrType(((FunctionPointerTypeContext)_localctx).args._typesWithComma, ((FunctionPointerTypeContext)_localctx).returnType._type); } 
 			}
 		}
 		catch (RecognitionException re) {
@@ -2038,13 +1999,7 @@ public class SophiaParser extends Parser {
 				}
 			}
 
-			((ReturnStatementContext)_localctx)._returnStatement =  new ReturnStmt();
-			        if ((((ReturnStatementContext)_localctx).exp1!=null?_input.getText(((ReturnStatementContext)_localctx).exp1.start,((ReturnStatementContext)_localctx).exp1.stop):null) != null)
-			            _localctx._returnStatement.setReturnedExpr(((ReturnStatementContext)_localctx).exp1._expression);
-			        else
-			            _localctx._returnStatement.getReturnedExpr().setLine(((ReturnStatementContext)_localctx).r.getLine());
-			        _localctx._returnStatement.setLine(((ReturnStatementContext)_localctx).r.getLine());
-			    
+			((ReturnStatementContext)_localctx)._returnStatement =  new ReturnStmt(); if ((((ReturnStatementContext)_localctx).exp1!=null?_input.getText(((ReturnStatementContext)_localctx).exp1.start,((ReturnStatementContext)_localctx).exp1.stop):null) != null) _localctx._returnStatement.setReturnedExpr(((ReturnStatementContext)_localctx).exp1._expression); else _localctx._returnStatement.getReturnedExpr().setLine(((ReturnStatementContext)_localctx).r.getLine()); _localctx._returnStatement.setLine(((ReturnStatementContext)_localctx).r.getLine()); 
 			setState(366);
 			match(SEMICOLLON);
 			}
@@ -2509,14 +2464,7 @@ public class SophiaParser extends Parser {
 			match(RPAR);
 			setState(438);
 			((ForStatementContext)_localctx).body = statement();
-
-					((ForStatementContext)_localctx)._for =  new ForStmt();
-					_localctx._for.setLine(((ForStatementContext)_localctx).f.getLine());
-					if ((((ForStatementContext)_localctx).init!=null?_input.getText(((ForStatementContext)_localctx).init.start,((ForStatementContext)_localctx).init.stop):null) != null) _localctx._for.setInitialize(((ForStatementContext)_localctx).init.assign);
-					if ((((ForStatementContext)_localctx).exp!=null?_input.getText(((ForStatementContext)_localctx).exp.start,((ForStatementContext)_localctx).exp.stop):null) != null) _localctx._for.setCondition(((ForStatementContext)_localctx).exp._expression);
-					if ((((ForStatementContext)_localctx).update!=null?_input.getText(((ForStatementContext)_localctx).update.start,((ForStatementContext)_localctx).update.stop):null) != null) _localctx._for.setUpdate(((ForStatementContext)_localctx).update.assign);
-					_localctx._for.setBody(((ForStatementContext)_localctx).body._statement);
-				
+			 ((ForStatementContext)_localctx)._for =  new ForStmt(); _localctx._for.setLine(((ForStatementContext)_localctx).f.getLine()); if ((((ForStatementContext)_localctx).init!=null?_input.getText(((ForStatementContext)_localctx).init.start,((ForStatementContext)_localctx).init.stop):null) != null) _localctx._for.setInitialize(((ForStatementContext)_localctx).init.assign); if ((((ForStatementContext)_localctx).exp!=null?_input.getText(((ForStatementContext)_localctx).exp.start,((ForStatementContext)_localctx).exp.stop):null) != null) _localctx._for.setCondition(((ForStatementContext)_localctx).exp._expression); if ((((ForStatementContext)_localctx).update!=null?_input.getText(((ForStatementContext)_localctx).update.start,((ForStatementContext)_localctx).update.stop):null) != null) _localctx._for.setUpdate(((ForStatementContext)_localctx).update.assign); _localctx._for.setBody(((ForStatementContext)_localctx).body._statement); 
 			}
 		}
 		catch (RecognitionException re) {
@@ -2588,12 +2536,7 @@ public class SophiaParser extends Parser {
 			match(RPAR);
 			setState(447);
 			((ForeachStatementContext)_localctx).body = statement();
-
-					((ForeachStatementContext)_localctx)._foreach =  new ForeachStmt(((ForeachStatementContext)_localctx).name.id, ((ForeachStatementContext)_localctx).exp._expression);
-					_localctx._foreach.setLine(((ForeachStatementContext)_localctx).f.getLine());
-					_localctx._foreach.setBody(((ForeachStatementContext)_localctx).body._statement);
-					_localctx._foreach.setList(((ForeachStatementContext)_localctx).exp._expression);
-				
+			 ((ForeachStatementContext)_localctx)._foreach =  new ForeachStmt(((ForeachStatementContext)_localctx).name.id, ((ForeachStatementContext)_localctx).exp._expression); _localctx._foreach.setLine(((ForeachStatementContext)_localctx).f.getLine()); _localctx._foreach.setBody(((ForeachStatementContext)_localctx).body._statement); _localctx._foreach.setList(((ForeachStatementContext)_localctx).exp._expression); 
 			}
 		}
 		catch (RecognitionException re) {
@@ -2673,11 +2616,7 @@ public class SophiaParser extends Parser {
 				}
 				break;
 			}
-
-					((IfStatementContext)_localctx)._if =  new ConditionalStmt(((IfStatementContext)_localctx).exp._expression, ((IfStatementContext)_localctx).thenBody._statement);
-					_localctx._if.setLine(((IfStatementContext)_localctx).i.getLine());
-					if ((((IfStatementContext)_localctx).elseBody!=null?_input.getText(((IfStatementContext)_localctx).elseBody.start,((IfStatementContext)_localctx).elseBody.stop):null) != null) _localctx._if.setElseBody(((IfStatementContext)_localctx).elseBody._statement);
-				
+			 ((IfStatementContext)_localctx)._if =  new ConditionalStmt(((IfStatementContext)_localctx).exp._expression, ((IfStatementContext)_localctx).thenBody._statement); _localctx._if.setLine(((IfStatementContext)_localctx).i.getLine()); if ((((IfStatementContext)_localctx).elseBody!=null?_input.getText(((IfStatementContext)_localctx).elseBody.start,((IfStatementContext)_localctx).elseBody.stop):null) != null) _localctx._if.setElseBody(((IfStatementContext)_localctx).elseBody._statement); 
 			}
 		}
 		catch (RecognitionException re) {
@@ -2742,11 +2681,7 @@ public class SophiaParser extends Parser {
 				}
 			}
 
-
-					((ExpressionContext)_localctx)._expression =  ((ExpressionContext)_localctx).exp1._or;
-					if ((((ExpressionContext)_localctx).exp2!=null?_input.getText(((ExpressionContext)_localctx).exp2.start,((ExpressionContext)_localctx).exp2.stop):null) != null)
-						((ExpressionContext)_localctx)._expression =  new BinaryExpression(_localctx._expression, ((ExpressionContext)_localctx).exp2._expression, BinaryOperator.assign);
-				
+			((ExpressionContext)_localctx)._expression =  ((ExpressionContext)_localctx).exp1._or; if ((((ExpressionContext)_localctx).exp2!=null?_input.getText(((ExpressionContext)_localctx).exp2.start,((ExpressionContext)_localctx).exp2.stop):null) != null) ((ExpressionContext)_localctx)._expression =  new BinaryExpression(_localctx._expression, ((ExpressionContext)_localctx).exp2._expression, BinaryOperator.assign);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2814,10 +2749,7 @@ public class SophiaParser extends Parser {
 				((OrExpressionContext)_localctx).o = match(OR);
 				setState(471);
 				((OrExpressionContext)_localctx).e2 = andExpression();
-
-						((OrExpressionContext)_localctx)._or =  new BinaryExpression(_localctx._or, ((OrExpressionContext)_localctx).e2._and, BinaryOperator.or);
-						_localctx._or.setLine(((OrExpressionContext)_localctx).o.getLine());
-					
+				((OrExpressionContext)_localctx)._or =  new BinaryExpression(_localctx._or, ((OrExpressionContext)_localctx).e2._and, BinaryOperator.or); _localctx._or.setLine(((OrExpressionContext)_localctx).o.getLine());
 				}
 				}
 				setState(478);
@@ -2891,10 +2823,7 @@ public class SophiaParser extends Parser {
 				((AndExpressionContext)_localctx).a = match(AND);
 				setState(482);
 				((AndExpressionContext)_localctx).e2 = equalityExpression();
-
-						((AndExpressionContext)_localctx)._and =  new BinaryExpression(_localctx._and, ((AndExpressionContext)_localctx).e2._eq, BinaryOperator.and);
-						_localctx._and.setLine(((AndExpressionContext)_localctx).a.getLine());
-					
+				((AndExpressionContext)_localctx)._and =  new BinaryExpression(_localctx._and, ((AndExpressionContext)_localctx).e2._eq, BinaryOperator.and); _localctx._and.setLine(((AndExpressionContext)_localctx).a.getLine());
 				}
 				}
 				setState(489);
@@ -3419,17 +3348,7 @@ public class SophiaParser extends Parser {
 				setState(564);
 				((PreUnaryExpressionContext)_localctx).preUnryExp = preUnaryExpression();
 				}
-
-						((PreUnaryExpressionContext)_localctx)._preUnaryExpression =  new UnaryExpression(((PreUnaryExpressionContext)_localctx).preUnryExp._preUnaryExpression, _localctx.operator);
-						if (_localctx.operator == UnaryOperator.not)
-							_localctx._preUnaryExpression.setLine(((PreUnaryExpressionContext)_localctx).n.getLine());
-						if (_localctx.operator == UnaryOperator.minus)
-				        	_localctx._preUnaryExpression.setLine(((PreUnaryExpressionContext)_localctx).mi.getLine());
-				        if (_localctx.operator == UnaryOperator.preinc)
-				       		_localctx._preUnaryExpression.setLine(((PreUnaryExpressionContext)_localctx).inc.getLine());
-				        if (_localctx.operator == UnaryOperator.predec)
-				   			_localctx._preUnaryExpression.setLine(((PreUnaryExpressionContext)_localctx).dec.getLine());
-					
+				((PreUnaryExpressionContext)_localctx)._preUnaryExpression =  new UnaryExpression(((PreUnaryExpressionContext)_localctx).preUnryExp._preUnaryExpression, _localctx.operator); if (_localctx.operator == UnaryOperator.not) _localctx._preUnaryExpression.setLine(((PreUnaryExpressionContext)_localctx).n.getLine()); if (_localctx.operator == UnaryOperator.minus) _localctx._preUnaryExpression.setLine(((PreUnaryExpressionContext)_localctx).mi.getLine()); if (_localctx.operator == UnaryOperator.preinc) _localctx._preUnaryExpression.setLine(((PreUnaryExpressionContext)_localctx).inc.getLine()); if (_localctx.operator == UnaryOperator.predec) _localctx._preUnaryExpression.setLine(((PreUnaryExpressionContext)_localctx).dec.getLine());
 				}
 				break;
 			case NEW:
@@ -3539,18 +3458,7 @@ public class SophiaParser extends Parser {
 			default:
 				break;
 			}
-
-			        if (((((PostUnaryExpressionContext)_localctx).inc!=null?((PostUnaryExpressionContext)_localctx).inc.getText():null) == null) && ((((PostUnaryExpressionContext)_localctx).dec!=null?((PostUnaryExpressionContext)_localctx).dec.getText():null) == null))
-			            ((PostUnaryExpressionContext)_localctx)._postUnaryExpression =  ((PostUnaryExpressionContext)_localctx).acssExp._accessExpression;
-			        else
-			        {
-			            ((PostUnaryExpressionContext)_localctx)._postUnaryExpression =  new UnaryExpression(((PostUnaryExpressionContext)_localctx).acssExp._accessExpression, _localctx.operator);
-			    		if ((((PostUnaryExpressionContext)_localctx).inc!=null?((PostUnaryExpressionContext)_localctx).inc.getText():null) != null)
-			    			_localctx._postUnaryExpression.setLine(((PostUnaryExpressionContext)_localctx).inc.getLine());
-			    		else
-			    			_localctx._postUnaryExpression.setLine(((PostUnaryExpressionContext)_localctx).dec.getLine());
-			    	}
-			    
+			 if (((((PostUnaryExpressionContext)_localctx).inc!=null?((PostUnaryExpressionContext)_localctx).inc.getText():null) == null) && ((((PostUnaryExpressionContext)_localctx).dec!=null?((PostUnaryExpressionContext)_localctx).dec.getText():null) == null)) ((PostUnaryExpressionContext)_localctx)._postUnaryExpression =  ((PostUnaryExpressionContext)_localctx).acssExp._accessExpression; else { ((PostUnaryExpressionContext)_localctx)._postUnaryExpression =  new UnaryExpression(((PostUnaryExpressionContext)_localctx).acssExp._accessExpression, _localctx.operator); if ((((PostUnaryExpressionContext)_localctx).inc!=null?((PostUnaryExpressionContext)_localctx).inc.getText():null) != null) _localctx._postUnaryExpression.setLine(((PostUnaryExpressionContext)_localctx).inc.getLine()); else _localctx._postUnaryExpression.setLine(((PostUnaryExpressionContext)_localctx).dec.getLine());}
 			}
 		}
 		catch (RecognitionException re) {
